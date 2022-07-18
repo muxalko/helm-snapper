@@ -31,17 +31,33 @@ echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client --output=yaml
 
+
+# TODO: install carvel tools - install script depends on perl https://metacpan.org/dist/Digest-SHA
+# shasum install (must have perl as a prerequisite)
+wget https://cpan.metacpan.org/authors/id/M/MS/MSHELOR/Digest-SHA-6.02.tar.gz 
+zxvf Digest-SHA-6.02.tar.gz
+mv Digest-SHA-6.02/shasum /usr/local/bin/
+rm -rf Digest-SHA-6.02*
+
+wget -O- https://carvel.dev/install.sh > install_carvel_tools.sh
+# Inspect install.sh before running...
+bash install_carvel_tools.sh
+rm -rf install_carvel_tools.sh
+
 # install helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
+rm -rf ./get_helm.sh
 
 # install k9s
 curl -fsSL -o k9s_Linux_x86_64.tar.gz https://github.com/derailed/k9s/releases/download/v0.25.21/k9s_Linux_x86_64.tar.gz
 tar zxvf k9s_Linux_x86_64.tar.gz
 chmod +x ./k9s
 mv k9s /usr/local/bin/
-# install kind
+rm -rf k9s_Linux_x86_64*
+
+# install kind - to start your own k8s cluster in docker for testing
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /usr/local/bin/kind
