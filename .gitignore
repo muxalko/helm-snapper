@@ -1,1 +1,5 @@
 .lock
+template_*
+manifest_*
+log_*
+tmp_*
